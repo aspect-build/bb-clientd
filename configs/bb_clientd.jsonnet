@@ -1,7 +1,7 @@
-local cluster_backend = 'api.mycluster-prod.example.com';
+local cluster_backend = 'remote-cache-9e85d2169ed596f9.elb.us-east-2.amazonaws.com';
 
 local grpcClient(hostname, authorizationHeader, proxyURL) = {
-  address: hostname + ':443',
+  address: hostname + ':8980',
   tls: {},
   [if authorizationHeader != null then 'addMetadata']: [
     { header: 'authorization', values: [authorizationHeader] },
