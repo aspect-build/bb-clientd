@@ -2,6 +2,11 @@
 
 set -eu
 
+# Aspect is running this launch script as root without HOME env.
+# Set a default value for the configuration to work.
+export HOME="${HOME:-/buildbarn}"
+mkdir -p ~
+
 # Clean up stale FUSE mounts from previous invocations.
 fusermount -u ~/bb_clientd || true
 
@@ -18,15 +23,5 @@ if [ "$1" = "start" ]; then
 
   # Discard logs of the previous invocation.
   rm -f ~/.cache/bb_clientd/log
-
-  # Use either the user provided or system-wide configuration file, based
-  # on whether the former is present.
-  config_file=/usr/lib/bb_clientd/bb_clientd.jsonnet
-  personal_config_file="${HOME}/.config/bb_clientd.jsonnet"
-  if [ -f "${personal_config_file}" ]; then
-    ln -sf "${config_file}" "${HOME}/.config/bb_clientd_defaults.jsonnet"
-    config_file="${personal_config_file}"
-  fi
-
-  OS=$(uname) exec /usr/bin/bb_clientd "${config_file}"
+  OS=$(uname) exec /usr/bin/bb_clientd /usr/lib/bb_clientd/bb_clientd.jsonnet
 fi
