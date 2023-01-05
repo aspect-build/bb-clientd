@@ -112,7 +112,7 @@ local cacheDirectory = homeDirectory + '/.cache/bb_clientd';
   // Schedulers to which to route execution requests. This uses the same
   // routing policy as the storage configuration above.
   schedulers: {
-    '': grpcClient(cluster_backend, $.authorizationHeader, $.proxyURL),
+    '': { endpoint: grpcClient(cluster_backend, $.authorizationHeader, $.proxyURL) },
   },
 
   // A gRPC server to which Bazel can send requests, as opposed to
